@@ -1,0 +1,100 @@
+==========================================
+INSTRUCCIONES DE INSTALACIÓN — pobletedreyer.com
+==========================================
+
+Hola Lucas! Aquí van los pasos para reemplazar el proyecto Astro vacío
+con esta versión completa que ya tiene todo el mockup migrado.
+
+==========================================
+PASO 1: ABRIR LA TERMINAL
+==========================================
+
+1. Abre la Terminal (Cmd+Espacio → "Terminal" → ENTER)
+2. Navega al proyecto Astro que creaste antes:
+
+   cd ~/Documents/Proyectos/pobletedreyer
+
+3. Verifica que estás en el lugar correcto:
+
+   pwd
+
+   Debería mostrar algo como: /Users/lucas/Documents/Proyectos/pobletedreyer
+
+==========================================
+PASO 2: BORRAR EL CONTENIDO VIEJO
+==========================================
+
+Vamos a borrar las carpetas src y public viejas para reemplazarlas con
+las nuevas. NO te preocupes, solo borramos lo que vas a reemplazar:
+
+   rm -rf src public
+
+(Si te pregunta confirmación, escribe "y" y presiona ENTER)
+
+==========================================
+PASO 3: COPIAR LOS NUEVOS ARCHIVOS
+==========================================
+
+1. Descomprime el archivo ZIP que descargaste (debería crearse una
+   carpeta llamada "pobletedreyer" con todos los archivos adentro).
+
+2. Abre Finder y entra a esa carpeta descomprimida.
+
+3. Selecciona TODO lo que está adentro (Cmd+A) y CÓPIALO (Cmd+C).
+   Deberías estar copiando: README.md, INSTRUCCIONES.txt, las carpetas
+   src/ y public/, y favicon.svg.
+
+4. En Finder, anda a:
+
+   Documents → Proyectos → pobletedreyer
+
+5. PEGA todo ahí (Cmd+V).
+
+6. Si te pregunta "¿reemplazar archivos?", elige "Reemplazar".
+
+==========================================
+PASO 4: PROBAR QUE FUNCIONA
+==========================================
+
+Vuelve a la Terminal (todavía debes estar en la carpeta pobletedreyer)
+y ejecuta:
+
+   npm run dev
+
+Verás algo así:
+
+   astro  v5.x.x ready in 234ms
+   ┃ Local    http://localhost:4321/
+
+Abre el navegador y anda a:
+
+   http://localhost:4321
+
+Deberías ver el Home con el carrusel de fotos rotando, el título
+"The Living Desert", etc.
+
+==========================================
+EXPLORA LAS PÁGINAS
+==========================================
+
+Mientras el servidor está corriendo, prueba navegar a:
+
+   http://localhost:4321              ← Home
+   http://localhost:4321/about        ← About
+   http://localhost:4321/series/the-living-desert   ← Serie completa
+
+==========================================
+PARA DETENER EL SERVIDOR
+==========================================
+
+En la Terminal, presiona: Control + C
+
+==========================================
+SI ALGO FALLA
+==========================================
+
+Si ves algún error:
+1. Toma screenshot del mensaje en Terminal
+2. Avísame y te ayudo a arreglarlo
+
+¡Un abrazo siempre!

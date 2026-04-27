@@ -1,0 +1,130 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+---
+
+<BaseLayout
+  title="The Living Desert · Lucas Poblete Dreyer"
+  description="A continuing record of the Atacama Desert — flamingos, vicuñas, viscachas, and the life that thrives in what looks, at first, like absence."
+>
+  <Nav active="work" />
+
+  <div class="series-page">
+    <div class="series-intro">
+      <div class="breadcrumb"><a href="/">Work</a> &nbsp;/&nbsp; The Living Desert</div>
+      <h1>The Living Desert</h1>
+      <div class="meta-row">
+        <span>Atacama, Chile</span>·<span>2024 — Ongoing</span>·<span>16 photographs shown</span>
+      </div>
+      <p>The Atacama appears, at first, as absence — a vast and silent geometry of salt, stone, and sky. But return to it, and the desert reveals its inhabitants. A flamingo bent over brine. A viscacha among red stones. A vicuña, attentive and elsewhere.</p>
+      <p>This series is a continuing record of those encounters.</p>
+      <p class="byline">— Photographs by Lucas Poblete Dreyer</p>
+    </div>
+
+    <div class="sequence">
+
+      <!-- I. APERTURA / GEOLOGIA -->
+      <div class="plate full">
+        <img src="/photos/landscape.jpg" alt="Camino al salar at last light" />
+        <div class="caption"><span class="num">01</span>Returning from Laguna Chaxa, last light. Salar de Atacama, 2024.</div>
+      </div>
+
+      <div class="plate full">
+        <img src="/photos/basalt.jpg" alt="Volcanic stone formations" />
+        <div class="caption"><span class="num">02</span>Volcanic stone formations. Jucones, 2025.</div>
+      </div>
+
+      <div class="text-interlude">
+        Of the desert one learns slowly. The first lesson is to wait.
+      </div>
+
+      <!-- II. PASTORAL -->
+      <div class="plate full">
+        <img src="/photos/llamas_herd.jpg" alt="Atacameño pastor with his herd" />
+        <div class="caption"><span class="num">03</span>Pastor with his herd. Salar de Aguas Calientes, 2025.</div>
+      </div>
+
+      <div class="plate center">
+        <img src="/photos/llama_ribbons.jpg" alt="Llama with ceremonial ribbons" />
+        <div class="caption"><span class="num">04</span>Marked llama, ceremonial ribbons. Machuca, 2025.</div>
+      </div>
+
+      <!-- III. AGUA / FLAMENCOS -->
+      <div class="plate full">
+        <img src="/photos/flamingos_pair.jpg" alt="Two Andean flamingos drinking" />
+        <div class="caption"><span class="num">05</span>Andean flamingos, at the water&rsquo;s edge. Laguna Chaxa, 2025.</div>
+      </div>
+
+      <div class="plate full">
+        <img src="/photos/flamingos_courtship.jpg" alt="Two flamingos in courtship, necks entwined" />
+        <div class="caption"><span class="num">06</span>Chilean flamingos, courtship. Vado de Machuca, 2025.</div>
+      </div>
+
+      <div class="plate full">
+        <img src="/photos/flamingos_neck.jpg" alt="Chilean flamingos in territorial dispute" />
+        <div class="caption"><span class="num">07</span>Chilean flamingos in dispute. Vado de Machuca, 2025.</div>
+      </div>
+
+      <div class="plate full">
+        <img src="/photos/flamingo_flight.jpg" alt="James's flamingo in flight" />
+        <div class="caption"><span class="num">08</span>James&rsquo;s flamingo, in flight. Vado de Machuca, 2025.</div>
+      </div>
+
+      <div class="text-interlude">
+        Each return adds a name, an angle, a small revision.
+      </div>
+
+      <!-- IV. HABITANTES -->
+      <div class="plate full">
+        <img src="/photos/duck.jpg" alt="Puna teal in bofedal" />
+        <div class="caption"><span class="num">09</span>Puna teal, in the bofedal. Vado de Machuca, 2025.</div>
+      </div>
+
+      <div class="plate full">
+        <img src="/photos/suris.jpg" alt="Puna rheas grazing" />
+        <div class="caption"><span class="num">10</span>Puna rheas, grazing. Road to Piedras Rojas, Volcán Tuyajto, 2025.</div>
+      </div>
+
+      <div class="plate full">
+        <img src="/photos/vicunas_volcano.jpg" alt="Vicuñas crossing the volcano slope" />
+        <div class="caption"><span class="num">11</span>Vicuñas, on the volcano slope. Laguna Miscanti, 2025.</div>
+      </div>
+
+      <div class="plate full">
+        <img src="/photos/vicunas_fight.jpg" alt="Vicuñas in territorial dispute" />
+        <div class="caption"><span class="num">12</span>Vicuñas in dispute. Laguna Miñiques, 2025.</div>
+      </div>
+
+      <!-- V. ROCK DWELLERS -->
+      <div class="plate full">
+        <img src="/photos/viscacha_cave.jpg" alt="Mountain viscacha sheltered between rocks" />
+        <div class="caption"><span class="num">13</span>Mountain viscacha, sheltered. Jucones, 2025.</div>
+      </div>
+
+      <div class="plate center">
+        <img src="/photos/lizard.jpg" alt="Liolaemus lizard sunning" />
+        <div class="caption"><span class="num">14</span>Liolaemus, sunning. Laguna Chaxa, 2025.</div>
+      </div>
+
+      <div class="text-interlude">
+        And then, sometimes, the desert gives more than is asked.
+      </div>
+
+      <!-- CIERRE: Díptico arcoíris -->
+      <div class="plate diptych">
+        <div class="panel">
+          <img src="/photos/vicuna_contemplative.jpg" alt="Vicuña in profile, with herd at distance" />
+          <div class="caption"><span class="num">15</span>Vicuña in profile, herd at the horizon. Vado Río Putana, 2025.</div>
+        </div>
+        <div class="panel">
+          <img src="/photos/vicuna_rainbow.jpg" alt="Vicuña under a rainbow" />
+          <div class="caption"><span class="num">16</span>Vicuña, under a rainbow. Vado Río Putana, with Volcán Tatio in the distance, 2025.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <Footer />
+</BaseLayout>

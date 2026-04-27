@@ -1,0 +1,15 @@
+---
+// Nav component — receives an "active" prop to highlight current page
+const { active = "" } = Astro.props;
+---
+
+<nav>
+  <div class="brand"><a href="/">Lucas Poblete Dreyer</a></div>
+  <div class="menu">
+    <a href="/" class={active === "work" ? "active" : ""}>Work</a>
+    <a href="/about" class={active === "about" ? "active" : ""}>About</a>
+    <a href="#prints" class={active === "prints" ? "active" : ""}>Prints</a>
+    <a href="#contact" class={active === "contact" ? "active" : ""}>Contact</a>
+  </div>
+  <div class="lang"><span class="active">EN</span> · <span>ES</span></div>
+</nav>

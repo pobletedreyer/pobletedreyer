@@ -1,17 +1,56 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import Carousel from "../components/Carousel.astro";
 
+// Carousel rotation - 7 featured photos
+const carouselSlides = [
+  { src: "/photos/vicuna_rainbow.jpg", alt: "Vicuña under rainbow", caption: "Vicuña, under a rainbow. Vado Río Putana, 2025", objectPosition: "center 75%" },
+  { src: "/photos/vicunas_fight.jpg", alt: "Vicuñas fighting", caption: "Vicuñas in dispute. Laguna Miñiques, 2025" },
+  { src: "/photos/viscacha_cave.jpg", alt: "Mountain viscacha", caption: "Mountain viscacha, sheltered. Jucones, 2025" },
+  { src: "/photos/llamas_herd.jpg", alt: "Pastor with llama herd", caption: "Atacameño pastor with his herd. Salar de Aguas Calientes, 2025" },
+  { src: "/photos/vicunas_volcano.jpg", alt: "Vicuñas with volcano", caption: "Vicuñas on the volcano slope. Laguna Miscanti, 2025" },
+  { src: "/photos/landscape.jpg", alt: "Camino al salar", caption: "Returning from Laguna Chaxa, last light. Salar de Atacama, 2024" },
+  { src: "/photos/flamingos_neck.jpg", alt: "Andean flamingos in display", caption: "Chilean flamingos in dispute. Vado de Machuca, 2025" },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="Lucas Poblete Dreyer · Photographer"
+  description="A continuing study of the Atacama Desert — its silences, inhabitants, and the precise life that thrives in what looks, at first, like absence."
+>
+  <Nav active="work" />
+
+  <section class="home-hero">
+    <Carousel slides={carouselSlides} />
+
+    <div class="meta">
+      <div class="left">Featured Series<br />2024 — Ongoing</div>
+      <div class="center">
+        <h1 class="series-title">The Living Desert</h1>
+        <p class="series-desc">A continuing study of the Atacama — its silences, its inhabitants, and the precise life that thrives in what looks, at first, like absence.</p>
+      </div>
+      <div class="right"><a href="/series/the-living-desert">View Series →</a></div>
+    </div>
+  </section>
+
+  <section class="home-works">
+    <div class="section-head">
+      <div class="label">All Work</div>
+      <h2>Selected <em>series</em> and ongoing projects.</h2>
+    </div>
+    <a href="/series/the-living-desert" class="work-row">
+      <div class="work-meta">2024 — Ongoing<br />Atacama, Chile</div>
+      <h3>The Living Desert</h3>
+      <div class="arrow">→</div>
+    </a>
+    <div class="work-row upcoming">
+      <div class="work-meta">In Development</div>
+      <h3>—</h3>
+      <div class="arrow"></div>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>

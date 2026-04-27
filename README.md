@@ -1,43 +1,56 @@
-# Astro Starter Kit: Minimal
+# pobletedreyer.com
 
-```sh
-npm create astro@latest -- --template minimal
+Sitio web de portafolio fotográfico de Lucas Poblete Dreyer.
+
+## Stack
+- **Astro** 5.x — generador de sitios estáticos
+- **Vercel** — hosting + deploy automático
+- **GoDaddy** — dominio (DNS apuntando a Vercel)
+
+## Estructura
+
 ```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
+pobletedreyer/
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── components/         Componentes reutilizables (Nav, Footer, Carousel)
+│   ├── layouts/            Layout base con <head> y fonts
+│   ├── pages/
+│   │   ├── index.astro     Home con carousel
+│   │   ├── about.astro     Página About
+│   │   └── series/
+│   │       └── the-living-desert.astro
+│   └── styles/
+│       └── global.css      Todos los estilos del sitio
+└── public/
+    └── photos/             16 fotos de la serie + retrato
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Comandos
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```bash
+# Iniciar servidor local en desarrollo
+npm run dev
 
-Any static assets, like images, can be placed in the `public/` directory.
+# Construir el sitio para producción
+npm run build
 
-## 🧞 Commands
+# Previsualizar el sitio construido
+npm run preview
+```
 
-All commands are run from the root of the project, from a terminal:
+## Editar contenido
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+- **Captions de fotos**: editar `src/pages/series/the-living-desert.astro`
+- **Bio del About**: editar `src/pages/about.astro`
+- **Carousel del Home**: editar la lista `carouselSlides` en `src/pages/index.astro`
+- **Footer e info de contacto**: editar `src/components/Footer.astro`
 
-## 👀 Want to learn more?
+## Agregar una foto nueva
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+1. Optimizar la foto a max 1600px (lado largo) en JPG quality 85
+2. Copiar a `public/photos/` con un nombre descriptivo (ej. `flamingo_dawn.jpg`)
+3. Agregar un nuevo `<div class="plate full">...</div>` en la página correspondiente
+
+## Deploy
+
+El deploy se hace automáticamente en Vercel cada vez que se hace push a GitHub.

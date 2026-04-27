@@ -1,0 +1,99 @@
+---
+// Carousel component
+// Receives: slides = [ { src, alt, caption, objectPosition? } ]
+const { slides } = Astro.props;
+---
+
+<div class="feature-image carousel" id="heroCarousel">
+  <div class="carousel-track">
+    {slides.map((slide, i) => (
+      <img
+        src={slide.src}
+        alt={slide.alt}
+        class={`carousel-slide${i === 0 ? " active" : ""}`}
+        data-caption={slide.caption}
+        style={slide.objectPosition ? `object-position: ${slide.objectPosition};` : undefined}
+      />
+    ))}
+  </div>
+  <div class="carousel-caption" id="heroCaption">{slides[0].caption}</div>
+  <div class="carousel-counter">
+    <span id="counterCurrent">01</span>
+    <span class="counter-sep">/</span>
+    <span id="counterTotal">{String(slides.length).padStart(2, "0")}</span>
+  </div>
+  <button class="carousel-nav prev" id="prevBtn">←</button>
+  <button class="carousel-nav next" id="nextBtn">→</button>
+  <div class="carousel-dots" id="heroDots"></div>
+</div>
+
+<script>
+  (function () {
+    const slides = document.querySelectorAll<HTMLImageElement>("#heroCarousel .carousel-slide");
+    const caption = document.getElementById("heroCaption");
+    const counter = document.getElementById("counterCurrent");
+    const dotsContainer = document.getElementById("heroDots");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    if (!slides.length || !caption || !counter || !dotsContainer || !prevBtn || !nextBtn) return;
+
+    let currentIndex = 0;
+    let autoplayTimer: ReturnType<typeof setInterval> | null = null;
+    const AUTOPLAY_MS = 5500;
+
+    slides.forEach((_, i) => {
+      const dot = document.createElement("button");
+      dot.className = "carousel-dot" + (i === 0 ? " active" : "");
+      dot.addEventListener("click", () => goTo(i, true));
+      dotsContainer.appendChild(dot);
+    });
+    const dots = document.querySelectorAll<HTMLButtonElement>("#heroDots .carousel-dot");
+
+    function goTo(index: number, manual = false) {
+      slides[currentIndex].classList.remove("active");
+      dots[currentIndex].classList.remove("active");
+      currentIndex = (index + slides.length) % slides.length;
+      slides[currentIndex].classList.add("active");
+      dots[currentIndex].classList.add("active");
+      if (caption) {
+        caption.style.opacity = "0";
+        setTimeout(() => {
+          caption.textContent = slides[currentIndex].dataset.caption || "";
+          caption.style.opacity = "1";
+        }, 400);
+      }
+      if (counter) counter.textContent = String(currentIndex + 1).padStart(2, "0");
+      if (manual) restartAutoplay();
+    }
+    function next() { goTo(currentIndex + 1); }
+    function prev() { goTo(currentIndex - 1); }
+    function startAutoplay() { autoplayTimer = setInterval(next, AUTOPLAY_MS); }
+    function restartAutoplay() {
+      if (autoplayTimer) clearInterval(autoplayTimer);
+      startAutoplay();
+    }
+
+    prevBtn.addEventListener("click", () => { prev(); restartAutoplay(); });
+    nextBtn.addEventListener("click", () => { next(); restartAutoplay(); });
+    const carousel = document.getElementById("heroCarousel");
+    if (carousel) {
+      carousel.addEventListener("mouseenter", () => { if (autoplayTimer) clearInterval(autoplayTimer); });
+      carousel.addEventListener("mouseleave", startAutoplay);
+      let touchStartX = 0;
+      carousel.addEventListener("touchstart", (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+      carousel.addEventListener("touchend", (e) => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) next(); else prev();
+          restartAutoplay();
+        }
+      }, { passive: true });
+    }
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") { prev(); restartAutoplay(); }
+      if (e.key === "ArrowRight") { next(); restartAutoplay(); }
+    });
+
+    startAutoplay();
+  })();
+</script>

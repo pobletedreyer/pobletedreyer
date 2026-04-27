@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<BaseLayout
+  title="About · Lucas Poblete Dreyer"
+  description="Lucas Poblete Dreyer is a Chilean photographer based in Santiago, with deep ties to the Atacama Desert."
+>
+  <Nav active="about" />
+
+  <div class="about-page">
+    <section class="about-hero">
+      <div class="text-col">
+        <h1>About</h1>
+        <div class="subtitle">Lucas Poblete Dreyer · Photographer</div>
+        <p>Lucas Poblete Dreyer is a Chilean photographer based in Santiago, with deep ties to the Atacama Desert through his family&rsquo;s hotel in San Pedro de Atacama, founded by his grandfather. A commercial engineer by training, he balances his work managing the hotel&rsquo;s two properties with monthly journeys to the altiplano, where photography has become his way of engaging with one of the most extreme landscapes on Earth.</p>
+        <p>His work focuses on the wildlife, geology, and human presence of the Andean altiplano &mdash; vicuñas, flamingos, viscachas, endemic reptiles, traditional shepherds, and the salt flats and volcanic ranges that shape the region. He is particularly drawn to documenting ecosystems currently threatened by lithium extraction and water diversion.</p>
+      </div>
+      <div class="portrait-col">
+        <img src="/photos/portrait.jpg" alt="Lucas Poblete Dreyer in the field" />
+        <div class="caption">In the field, Atacama · 2025</div>
+      </div>
+    </section>
+
+    <section class="about-facts">
+      <div class="fact">
+        <div class="label">Based in</div>
+        <div class="value">Santiago &amp;<br />San Pedro de Atacama</div>
+      </div>
+      <div class="fact">
+        <div class="label">Working since</div>
+        <div class="value">2021<br /><em>five years in the desert</em></div>
+      </div>
+      <div class="fact">
+        <div class="label">Recognition</div>
+        <div class="value">Submitted to <em>NPOTY</em><br />&amp; Wildlife Photographer<br />of the Year</div>
+      </div>
+      <div class="fact">
+        <div class="label">Approach</div>
+        <div class="value">Ethical fieldwork.<br />Patience.<br /><em>Slow returns.</em></div>
+      </div>
+    </section>
+
+    <section class="about-quote">
+      <p class="quote">My approach prioritizes ethical fieldwork, patience, and the documentation of moments that reveal the resilience and fragility of one of the most extreme ecosystems on Earth.</p>
+    </section>
+
+    <section class="about-connect" id="contact">
+      <h3>Get in touch</h3>
+      <div class="channels">
+        <div class="channel">
+          <a href="mailto:hola@pobletedreyer.com">hola@pobletedreyer.com</a>
+          <div class="label">Email</div>
+        </div>
+        <div class="channel">
+          <a href="https://instagram.com/pobletedreyer" target="_blank" rel="noopener">@pobletedreyer</a>
+          <div class="label">Instagram</div>
+        </div>
+        <div class="channel">
+          <a href="mailto:hola@pobletedreyer.com?subject=Print%20inquiry">Inquire about prints</a>
+          <div class="label">Limited Editions</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <Footer />
+</BaseLayout>
