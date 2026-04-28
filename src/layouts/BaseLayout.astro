@@ -6,6 +6,7 @@ const {
   image = "/photos/vicuna_rainbow.jpg",
 } = Astro.props;
 import "../styles/global.css";
+import Analytics from '@vercel/analytics/astro';
 
 // Build absolute URLs for OG tags
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -60,5 +61,6 @@ const imageURL = new URL(image, Astro.site);
 </head>
 <body oncontextmenu="return false;">
   <slot />
+  <Analytics />
 </body>
 </html>
