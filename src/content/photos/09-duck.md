@@ -1,10 +1,16 @@
 ---
 order: 9
-title: "Puna teal, in the bofedal"
-caption: "Puna teal, in the bofedal. Vado de Machuca."
+title:
+  en: "Puna teal, in the bofedal"
+  es: "Pato puna, en el bofedal"
+caption:
+  en: "Puna teal, in the bofedal. Vado de Machuca."
+  es: "Pato puna, en el bofedal. Vado de Machuca."
 location: "Vado de Machuca"
 image: "/photos/duck.jpg"
-alt: "Puna teal in bofedal"
+alt:
+  en: "Puna teal in bofedal"
+  es: "Pato puna en el bofedal"
 layout: "full"
 movement: "habitantes"
 ---

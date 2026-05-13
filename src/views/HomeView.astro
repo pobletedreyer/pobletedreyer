@@ -1,0 +1,110 @@
+---
+// Shared home page view. Used by /index.astro and /es/index.astro.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import Carousel from "../components/Carousel.astro";
+import { getCollection } from "astro:content";
+import { useTranslations, pickLang, localizedPath } from "../i18n/utils";
+import type { Locale } from "../i18n/config";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+
+// Carousel rotation - 7 featured photos. Captions are bilingual.
+const carouselSlidesData = [
+  { src: "/photos/vicuna_rainbow.jpg", altEn: "Vicuña under rainbow", altEs: "Vicuña bajo el arcoíris", capEn: "Vicuña, under a rainbow. Vado Río Putana, 2026", capEs: "Vicuña, bajo el arcoíris. Vado Río Putana, 2026", objectPosition: "center 75%" },
+  { src: "/photos/vicunas_fight.jpg", altEn: "Vicuñas fighting", altEs: "Vicuñas peleando", capEn: "Vicuñas in dispute. Laguna Miñiques, 2026", capEs: "Vicuñas en disputa. Laguna Miñiques, 2026" },
+  { src: "/photos/viscacha_cave.jpg", altEn: "Mountain viscacha", altEs: "Vizcacha de montaña", capEn: "Mountain viscacha, sheltered. Jucones, 2026", capEs: "Vizcacha de montaña, al resguardo. Jucones, 2026" },
+  { src: "/photos/llamas_herd.jpg", altEn: "Pastor with llama herd", altEs: "Pastor con su rebaño de llamas", capEn: "Atacameño pastor with his herd. Salar de Aguas Calientes, 2026", capEs: "Pastor atacameño con su rebaño. Salar de Aguas Calientes, 2026" },
+  { src: "/photos/vicunas_volcano.jpg", altEn: "Vicuñas with volcano", altEs: "Vicuñas con volcán al fondo", capEn: "Vicuñas on the volcano slope. Laguna Miscanti, 2026", capEs: "Vicuñas en la ladera del volcán. Laguna Miscanti, 2026" },
+  { src: "/photos/landscape.jpg", altEn: "Camino al salar", altEs: "Camino al salar", capEn: "Returning from Laguna Chaxa, last light. Salar de Atacama, 2026", capEs: "Regresando de Laguna Chaxa, última luz. Salar de Atacama, 2026" },
+  { src: "/photos/flamingos_neck.jpg", altEn: "Andean flamingos in display", altEs: "Flamencos en disputa", capEn: "Chilean flamingos in dispute. Vado de Machuca, 2026", capEs: "Flamencos chilenos en disputa. Vado de Machuca, 2026" },
+];
+
+const carouselSlides = carouselSlidesData.map((s) => ({
+  src: s.src,
+  alt: locale === "es" ? s.altEs : s.altEn,
+  caption: locale === "es" ? s.capEs : s.capEn,
+  objectPosition: s.objectPosition,
+}));
+
+// Pull all series, sorted by order; pick the featured one for hero
+const allSeries = await getCollection("series");
+const sortedSeries = allSeries.sort((a, b) => a.data.order - b.data.order);
+const featured = sortedSeries.find((s) => s.data.featured && s.data.published) ?? sortedSeries[0];
+
+// Period composer: "2025 — Ongoing" / "2025 — En curso" / "2025–2026"
+function formatPeriod(s: any): string {
+  if (s.data.period_end) return `${s.data.period_start}–${s.data.period_end}`;
+  const statusKey =
+    s.data.status === "ongoing" ? "home.status.ongoing"
+    : s.data.status === "completed" ? "home.status.completed"
+    : "home.status.in_development";
+  return `${s.data.period_start} — ${t(statusKey)}`;
+}
+
+function statusLabelOf(s: any): string {
+  const key =
+    s.data.status === "ongoing" ? "home.status.ongoing"
+    : s.data.status === "completed" ? "home.status.completed"
+    : "home.status.in_development";
+  return t(key);
+}
+---
+
+<BaseLayout
+  locale={locale}
+  description={t("meta.home_description")}
+>
+  <Nav active="work" locale={locale} />
+
+  <section class="home-hero">
+    <Carousel slides={carouselSlides} />
+
+    <div class="meta">
+      <div class="left">{t("home.featured_label")}<br />{formatPeriod(featured)}</div>
+      <div class="center">
+        <h1 class="series-title">{pickLang(featured.data.title, locale)}</h1>
+        <p class="series-desc">{pickLang(featured.data.description_short, locale)}</p>
+      </div>
+      <div class="right"><a href={localizedPath(`/series/${featured.id.replace(/\.md$/, "")}`, locale)}>{t("home.view_series")}</a></div>
+    </div>
+  </section>
+
+  <section class="home-works">
+    <div class="section-head">
+      <div class="label">{t("home.all_work_label")}</div>
+      <h2>{t("home.all_work_heading_pre")}<em>{t("home.all_work_heading_em")}</em>{t("home.all_work_heading_post")}</h2>
+    </div>
+
+    {sortedSeries.map((s) => {
+      const slug = s.id.replace(/\.md$/, "");
+      const isPublished = s.data.published;
+      const inDev = s.data.status === "in-development" || !isPublished;
+      const className = `work-row${inDev ? " upcoming" : ""}`;
+      const content = (
+        <>
+          <div class="work-meta">
+            {inDev ? statusLabelOf(s) : formatPeriod(s)}<br />
+            {inDev ? "" : s.data.location}
+          </div>
+          <h3>{pickLang(s.data.title, locale)}</h3>
+          <div class="arrow">{inDev ? "" : "→"}</div>
+        </>
+      );
+
+      return isPublished ? (
+        <a href={localizedPath(`/series/${slug}`, locale)} class={className}>{content}</a>
+      ) : (
+        <div class={className}>{content}</div>
+      );
+    })}
+  </section>
+
+  <Footer locale={locale} />
+</BaseLayout>

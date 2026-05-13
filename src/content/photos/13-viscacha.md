@@ -1,10 +1,16 @@
 ---
 order: 13
-title: "Mountain viscacha, sheltered"
-caption: "Mountain viscacha, sheltered. Jucones."
+title:
+  en: "Mountain viscacha, sheltered"
+  es: "Vizcacha de montaña, al resguardo"
+caption:
+  en: "Mountain viscacha, sheltered. Jucones."
+  es: "Vizcacha de montaña, al resguardo. Jucones."
 location: "Jucones"
 image: "/photos/viscacha_cave.jpg"
-alt: "Mountain viscacha sheltered between rocks"
+alt:
+  en: "Mountain viscacha sheltered between rocks"
+  es: "Vizcacha de montaña al resguardo entre las rocas"
 layout: "full"
 movement: "rock-dwellers"
 ---

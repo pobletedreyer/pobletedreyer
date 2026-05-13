@@ -1,15 +1,50 @@
 ---
-// Nav component — receives an "active" prop to highlight current page
-const { active = "" } = Astro.props;
+// Nav component — receives "active" (highlighted item) and "locale".
+import { useTranslations, switchLocalePath, localizedPath } from "../i18n/utils";
+import { locales, localeLabels, type Locale } from "../i18n/config";
+
+interface Props {
+  active?: string;
+  locale: Locale;
+}
+
+const { active = "", locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const currentPath = Astro.url.pathname;
 ---
 
 <nav>
-  <div class="brand"><a href="/">Lucas Poblete Dreyer</a></div>
+  <div class="brand"><a href={localizedPath("/", locale)}>Lucas Poblete Dreyer</a></div>
   <div class="menu">
-    <a href="/" class={active === "work" ? "active" : ""}>Work</a>
-    <a href="/about" class={active === "about" ? "active" : ""}>About</a>
-    <a href="/about#prints" class={active === "prints" ? "active" : ""}>Prints</a>
-    <a href="/about#contact" class={active === "contact" ? "active" : ""}>Contact</a>
+    <a href={localizedPath("/", locale)} class={active === "work" ? "active" : ""}>{t("nav.work")}</a>
+    <a href={localizedPath("/about", locale)} class={active === "about" ? "active" : ""}>{t("nav.about")}</a>
+    <a href={`${localizedPath("/about", locale)}#prints`} class={active === "prints" ? "active" : ""}>{t("nav.prints")}</a>
+    <a href={`${localizedPath("/about", locale)}#contact`} class={active === "contact" ? "active" : ""}>{t("nav.contact")}</a>
   </div>
-  <div class="lang"><span class="active">EN</span> · <span>ES</span></div>
+  <div class="lang" aria-label={t("lang.switch_aria")}>
+    {locales.map((l, i) => (
+      <>
+        {i > 0 && <span class="lang-sep"> · </span>}
+        <a
+          href={switchLocalePath(currentPath, l)}
+          class={l === locale ? "active" : ""}
+          data-set-lang={l}
+        >{localeLabels[l]}</a>
+      </>
+    ))}
+  </div>
 </nav>
+
+<script is:inline>
+  // Persist the user's manual choice when they click the language switcher.
+  (function () {
+    const links = document.querySelectorAll('nav .lang a[data-set-lang]');
+    links.forEach((a) => {
+      a.addEventListener('click', function () {
+        const lang = this.getAttribute('data-set-lang');
+        if (!lang) return;
+        document.cookie = 'pd_lang=' + lang + ';path=/;max-age=31536000;samesite=lax';
+      });
+    });
+  })();
+</script>

@@ -1,5 +1,5 @@
 ---
-import SeriesView from "../../views/SeriesView.astro";
+import SeriesView from "../../../views/SeriesView.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
@@ -15,4 +15,4 @@ export async function getStaticPaths() {
 const { series } = Astro.props;
 ---
 
-<SeriesView series={series} locale="en" />
+<SeriesView series={series} locale="es" />

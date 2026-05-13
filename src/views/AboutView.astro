@@ -1,0 +1,95 @@
+---
+// Shared about page view. Used by /about.astro and /es/about.astro.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import { useTranslations } from "../i18n/utils";
+import type { Locale } from "../i18n/config";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  title={t("meta.about_title")}
+  description={t("meta.about_description")}
+>
+  <Nav active="about" locale={locale} />
+
+  <div class="about-page">
+    <section class="about-hero">
+      <div class="text-col">
+        <h1>{t("about.title")}</h1>
+        <div class="subtitle">{t("about.subtitle")}</div>
+        <p>{t("about.bio_p1")}</p>
+        <p>{t("about.bio_p2")}</p>
+      </div>
+      <div class="portrait-col">
+        <img src="/photos/portrait.jpg" alt={t("about.portrait_caption")} />
+        <div class="caption">{t("about.portrait_caption")}</div>
+      </div>
+    </section>
+
+    <section class="about-facts">
+      <div class="fact">
+        <div class="label">{t("about.fact.based_in")}</div>
+        <div class="value">
+          {t("about.fact.based_in_value_line1")}<br />
+          {t("about.fact.based_in_value_line2")}
+        </div>
+      </div>
+      <div class="fact">
+        <div class="label">{t("about.fact.working_since")}</div>
+        <div class="value">
+          {t("about.fact.working_since_value_line1")}<br />
+          <em>{t("about.fact.working_since_value_line2")}</em>
+        </div>
+      </div>
+      <div class="fact">
+        <div class="label">{t("about.fact.recognition")}</div>
+        <div class="value">
+          {t("about.fact.recognition_value_line1")} <em>{t("about.fact.recognition_value_org1")}</em><br />
+          {t("about.fact.recognition_value_line2")}<br />
+          {t("about.fact.recognition_value_line3")}
+        </div>
+      </div>
+      <div class="fact">
+        <div class="label">{t("about.fact.approach")}</div>
+        <div class="value">
+          {t("about.fact.approach_value_line1")}<br />
+          {t("about.fact.approach_value_line2")}<br />
+          <em>{t("about.fact.approach_value_line3")}</em>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-quote">
+      <p class="quote">{t("about.quote")}</p>
+    </section>
+
+    <section class="about-connect" id="contact">
+      <h3>{t("about.connect_heading")}</h3>
+      <div class="channels">
+        <div class="channel">
+          <a href="mailto:hola@pobletedreyer.com">hola@pobletedreyer.com</a>
+          <div class="label">{t("about.channel.email")}</div>
+        </div>
+        <div class="channel">
+          <a href="https://instagram.com/pobletedreyer" target="_blank" rel="noopener">@pobletedreyer</a>
+          <div class="label">{t("about.channel.instagram")}</div>
+        </div>
+        <div class="channel" id="prints">
+          <a href="mailto:hola@pobletedreyer.com?subject=Print%20inquiry">{t("about.channel.prints_link")}</a>
+          <div class="label">{t("about.channel.prints_label")}</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <Footer locale={locale} />
+</BaseLayout>

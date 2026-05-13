@@ -1,0 +1,113 @@
+---
+// Shared series page view. Used by /series/[slug].astro and /es/series/[slug].astro.
+// Receives the resolved series entry + locale.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import { getCollection } from "astro:content";
+import { useTranslations, pickLang } from "../i18n/utils";
+import type { Locale } from "../i18n/config";
+
+interface Props {
+  series: any;
+  locale: Locale;
+}
+
+const { series, locale } = Astro.props as Props;
+const t = useTranslations(locale);
+
+const slug = series.id.replace(/\.md$/, "");
+
+// Get photos that belong to this series, sorted by order
+const allPhotos = await getCollection("photos");
+const photos = allPhotos
+  .filter((p) => p.data.series === slug)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const sequencePhotos = photos.filter(
+  (p) => p.data.layout !== "diptych-left" && p.data.layout !== "diptych-right"
+);
+const diptychLeft = photos.find((p) => p.data.layout === "diptych-left");
+const diptychRight = photos.find((p) => p.data.layout === "diptych-right");
+
+// Status label (translated)
+const statusKey =
+  series.data.status === "ongoing" ? "home.status.ongoing"
+  : series.data.status === "completed" ? "home.status.completed"
+  : "home.status.in_development";
+const periodLabel = series.data.period_end
+  ? `${series.data.period_start}–${series.data.period_end}`
+  : `${series.data.period_start} — ${t(statusKey)}`;
+
+const seriesTitle = pickLang(series.data.title, locale);
+const photoCountLabel = photos.length === 1 ? t("series.photographs_one") : t("series.photographs_many");
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${seriesTitle} · Lucas Poblete Dreyer`}
+  description={pickLang(series.data.description_short, locale)}
+  image={series.data.cover_image}
+>
+  <Nav active="work" locale={locale} />
+
+  <div class="series-page">
+    <div class="series-intro">
+      <div class="breadcrumb">
+        <a href={locale === "es" ? "/es/" : "/"}>{t("series.breadcrumb_work")}</a>
+        &nbsp;/&nbsp; {seriesTitle}
+      </div>
+      <h1>{seriesTitle}</h1>
+      <div class="meta-row">
+        <span>{series.data.location}</span>·<span>{periodLabel}</span>·<span>{photos.length} {photoCountLabel}</span>
+      </div>
+      <p>{pickLang(series.data.description_intro, locale)}</p>
+      {series.data.description_paragraphs?.map((p: any) => <p>{pickLang(p, locale)}</p>)}
+      <p class="byline">{t("series.byline")}</p>
+    </div>
+
+    {photos.length === 0 ? (
+      <div class="series-empty">
+        <p><em>{t("series.empty")}</em></p>
+      </div>
+    ) : (
+      <div class="sequence">
+        {sequencePhotos.map((photo) => (
+          <>
+            <div class={`plate ${photo.data.layout}`}>
+              <img src={photo.data.image} alt={pickLang(photo.data.alt, locale)} />
+              <div class="caption">
+                <span class="num">{String(photo.data.order).padStart(2, "0")}</span>
+                {pickLang(photo.data.caption, locale)}
+              </div>
+            </div>
+            {photo.data.interlude_after && (
+              <div class="text-interlude">{pickLang(photo.data.interlude_after, locale)}</div>
+            )}
+          </>
+        ))}
+
+        {diptychLeft && diptychRight && (
+          <div class="plate diptych">
+            <div class="panel">
+              <img src={diptychLeft.data.image} alt={pickLang(diptychLeft.data.alt, locale)} />
+              <div class="caption">
+                <span class="num">{String(diptychLeft.data.order).padStart(2, "0")}</span>
+                {pickLang(diptychLeft.data.caption, locale)}
+              </div>
+            </div>
+            <div class="panel">
+              <img src={diptychRight.data.image} alt={pickLang(diptychRight.data.alt, locale)} />
+              <div class="caption">
+                <span class="num">{String(diptychRight.data.order).padStart(2, "0")}</span>
+                {pickLang(diptychRight.data.caption, locale)}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+
+  <Footer locale={locale} />
+</BaseLayout>

@@ -1,10 +1,16 @@
 ---
 order: 7
-title: "Chilean flamingos in dispute"
-caption: "Chilean flamingos in dispute. Vado de Machuca."
+title:
+  en: "Chilean flamingos in dispute"
+  es: "Flamencos chilenos en disputa"
+caption:
+  en: "Chilean flamingos in dispute. Vado de Machuca."
+  es: "Flamencos chilenos en disputa. Vado de Machuca."
 location: "Vado de Machuca"
 image: "/photos/flamingos_neck.jpg"
-alt: "Chilean flamingos in territorial dispute"
+alt:
+  en: "Chilean flamingos in territorial dispute"
+  es: "Flamencos chilenos en disputa territorial"
 layout: "full"
 movement: "agua-flamencos"
 ---
