@@ -1,0 +1,22 @@
+---
+// Loads Google Analytics 4 only when the PUBLIC_GA_MEASUREMENT_ID env var is set.
+// Configured with anonymize_ip and a short cookie lifetime to minimize
+// privacy / GDPR exposure. If the env var is empty (e.g. local dev), nothing renders.
+const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+---
+
+{measurementId && (
+  <>
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}></script>
+    <script is:inline define:vars={{ measurementId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', measurementId, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=Lax;Secure',
+        cookie_expires: 60 * 60 * 24 * 90, // 90 days
+      });
+    </script>
+  </>
+)}

@@ -1,0 +1,122 @@
+---
+// JSON-LD structured data for SEO and rich snippets.
+// Renders <script type="application/ld+json"> with the schema matching
+// the page type. Bilingual where applicable.
+import type { Locale } from "../i18n/config";
+import { pickLang, useTranslations } from "../i18n/utils";
+
+interface Props {
+  type: "website" | "about" | "series";
+  locale: Locale;
+  series?: any;          // present when type === "series"
+  photos?: any[];        // present when type === "series"
+}
+
+const { type, locale, series, photos = [] } = Astro.props as Props;
+const t = useTranslations(locale);
+const site = Astro.site!.toString().replace(/\/$/, "");
+const currentUrl = new URL(Astro.url.pathname, Astro.site).toString();
+
+// Shared Person/Organization for "author"
+const person = {
+  "@type": "Person",
+  "@id": `${site}/#person`,
+  name: "Lucas Poblete Dreyer",
+  url: `${site}${locale === "es" ? "/es/about" : "/about"}`,
+  image: `${site}/photos/portrait.jpg`,
+  jobTitle: locale === "es" ? "Fotógrafo" : "Photographer",
+  nationality: "Chilean",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Santiago",
+    addressCountry: "CL",
+  },
+  sameAs: [
+    "https://instagram.com/pobletedreyer",
+  ],
+};
+
+let schema: any = null;
+
+if (type === "website") {
+  schema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      person,
+      {
+        "@type": "WebSite",
+        "@id": `${site}/#website`,
+        url: site + "/",
+        name: "Lucas Poblete Dreyer · Photographer",
+        description: t("meta.home_description"),
+        inLanguage: locale === "es" ? "es-CL" : "en-US",
+        publisher: { "@id": `${site}/#person` },
+      },
+    ],
+  };
+} else if (type === "about") {
+  schema = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    url: currentUrl,
+    inLanguage: locale === "es" ? "es-CL" : "en-US",
+    mainEntity: {
+      ...person,
+      description: t("about.bio_p1"),
+      knowsAbout: [
+        "Wildlife photography",
+        "Atacama Desert",
+        "Andean altiplano",
+        "Vicuña",
+        "Flamingo",
+        "Astrophotography",
+      ],
+    },
+  };
+} else if (type === "series" && series) {
+  const seriesTitle = pickLang(series.data.title, locale);
+  const seriesDesc = pickLang(series.data.description_short, locale);
+  const seriesIntro = pickLang(series.data.description_intro, locale);
+
+  const photoItems = photos.map((p, i) => ({
+    "@type": "Photograph",
+    position: i + 1,
+    name: pickLang(p.data.title, locale),
+    description: pickLang(p.data.caption, locale),
+    image: site + p.data.image,
+    contentLocation: {
+      "@type": "Place",
+      name: p.data.location,
+    },
+    creator: { "@id": `${site}/#person` },
+    copyrightHolder: { "@id": `${site}/#person` },
+    copyrightYear: series.data.period_start,
+    license: `${site}/about`,
+  }));
+
+  schema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    url: currentUrl,
+    inLanguage: locale === "es" ? "es-CL" : "en-US",
+    name: seriesTitle,
+    description: seriesDesc,
+    about: seriesIntro,
+    mainEntity: {
+      "@type": "ImageGallery",
+      name: seriesTitle,
+      description: seriesDesc,
+      author: { "@id": `${site}/#person` },
+      datePublished: `${series.data.period_start}-01-01`,
+      locationCreated: {
+        "@type": "Place",
+        name: series.data.location,
+      },
+      numberOfItems: photos.length,
+      image: photoItems,
+    },
+  };
+}
+---
+
+{schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}

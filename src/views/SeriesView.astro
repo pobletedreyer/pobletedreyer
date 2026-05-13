@@ -4,6 +4,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
+import SchemaOrg from "../components/SchemaOrg.astro";
 import { getCollection } from "astro:content";
 import { useTranslations, pickLang } from "../i18n/utils";
 import type { Locale } from "../i18n/config";
@@ -49,6 +50,7 @@ const photoCountLabel = photos.length === 1 ? t("series.photographs_one") : t("s
   description={pickLang(series.data.description_short, locale)}
   image={series.data.cover_image}
 >
+  <SchemaOrg type="series" locale={locale} series={series} photos={photos} />
   <Nav active="work" locale={locale} />
 
   <div class="series-page">

@@ -2,6 +2,7 @@
 // Base layout for all pages. Receives locale and meta overrides.
 import "../styles/global.css";
 import Analytics from '@vercel/analytics/astro';
+import GoogleAnalytics from "../components/GoogleAnalytics.astro";
 import { defaultLocale, htmlLangMap, type Locale } from "../i18n/config";
 import { t, switchLocalePath } from "../i18n/utils";
 
@@ -108,5 +109,6 @@ const altEsURL = new URL(switchLocalePath(currentPath, "es"), Astro.site);
 <body oncontextmenu="return false;">
   <slot />
   <Analytics />
+  <GoogleAnalytics />
 </body>
 </html>
