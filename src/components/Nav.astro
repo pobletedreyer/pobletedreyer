@@ -8,8 +8,8 @@ const { active = "" } = Astro.props;
   <div class="menu">
     <a href="/" class={active === "work" ? "active" : ""}>Work</a>
     <a href="/about" class={active === "about" ? "active" : ""}>About</a>
-    <a href="#prints" class={active === "prints" ? "active" : ""}>Prints</a>
-    <a href="#contact" class={active === "contact" ? "active" : ""}>Contact</a>
+    <a href="/about#prints" class={active === "prints" ? "active" : ""}>Prints</a>
+    <a href="/about#contact" class={active === "contact" ? "active" : ""}>Contact</a>
   </div>
   <div class="lang"><span class="active">EN</span> · <span>ES</span></div>
 </nav>

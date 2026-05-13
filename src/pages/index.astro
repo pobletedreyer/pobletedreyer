@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import Carousel from "../components/Carousel.astro";
+import { getCollection } from "astro:content";
 
 // Carousel rotation - 7 featured photos
 const carouselSlides = [
@@ -14,6 +15,19 @@ const carouselSlides = [
   { src: "/photos/landscape.jpg", alt: "Camino al salar", caption: "Returning from Laguna Chaxa, last light. Salar de Atacama, 2026" },
   { src: "/photos/flamingos_neck.jpg", alt: "Andean flamingos in display", caption: "Chilean flamingos in dispute. Vado de Machuca, 2026" },
 ];
+
+// Pull all series, sorted by order; pick the featured one for hero
+const allSeries = await getCollection("series");
+const sortedSeries = allSeries.sort((a, b) => a.data.order - b.data.order);
+const featured = sortedSeries.find((s) => s.data.featured && s.data.published) ?? sortedSeries[0];
+
+// Status label helper
+const statusLabel = (status: string) => {
+  if (status === "ongoing") return "Ongoing";
+  if (status === "completed") return "Completed";
+  if (status === "in-development") return "In Development";
+  return status;
+};
 ---
 
 <BaseLayout
@@ -26,12 +40,12 @@ const carouselSlides = [
     <Carousel slides={carouselSlides} />
 
     <div class="meta">
-      <div class="left">Featured Series<br />2025 — Ongoing</div>
+      <div class="left">Featured Series<br />{featured.data.period}</div>
       <div class="center">
-        <h1 class="series-title">The Living Desert</h1>
-        <p class="series-desc">A continuing study of the Atacama — its silences, its inhabitants, and the precise life that thrives in what looks, at first, like absence.</p>
+        <h1 class="series-title">{featured.data.title}</h1>
+        <p class="series-desc">{featured.data.description_short}</p>
       </div>
-      <div class="right"><a href="/series/the-living-desert">View Series →</a></div>
+      <div class="right"><a href={`/series/${featured.id.replace(/\.md$/, "")}`}>View Series →</a></div>
     </div>
   </section>
 
@@ -40,16 +54,29 @@ const carouselSlides = [
       <div class="label">All Work</div>
       <h2>Selected <em>series</em> and ongoing projects.</h2>
     </div>
-    <a href="/series/the-living-desert" class="work-row">
-      <div class="work-meta">2025 — Ongoing<br />Atacama, Chile</div>
-      <h3>The Living Desert</h3>
-      <div class="arrow">→</div>
-    </a>
-    <div class="work-row upcoming">
-      <div class="work-meta">In Development</div>
-      <h3>—</h3>
-      <div class="arrow"></div>
-    </div>
+
+    {sortedSeries.map((s) => {
+      const slug = s.id.replace(/\.md$/, "");
+      const isPublished = s.data.published;
+      const inDev = s.data.status === "in-development" || !isPublished;
+      const className = `work-row${inDev ? " upcoming" : ""}`;
+      const content = (
+        <>
+          <div class="work-meta">
+            {inDev ? statusLabel(s.data.status) : `${s.data.period}`}<br />
+            {inDev ? "" : s.data.location}
+          </div>
+          <h3>{inDev && !s.data.title ? "—" : s.data.title}</h3>
+          <div class="arrow">{inDev ? "" : "→"}</div>
+        </>
+      );
+
+      return isPublished ? (
+        <a href={`/series/${slug}`} class={className}>{content}</a>
+      ) : (
+        <div class={className}>{content}</div>
+      );
+    })}
   </section>
 
   <Footer />

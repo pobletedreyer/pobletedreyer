@@ -1,0 +1,96 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const allSeries = await getCollection("series");
+  return allSeries
+    .filter((s) => s.data.published)
+    .map((s) => ({
+      params: { slug: s.id.replace(/\.md$/, "") },
+      props: { series: s },
+    }));
+}
+
+const { series } = Astro.props;
+const slug = series.id.replace(/\.md$/, "");
+
+// Get photos that belong to this series, sorted by order
+const allPhotos = await getCollection("photos");
+const photos = allPhotos
+  .filter((p) => p.data.series === slug)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const sequencePhotos = photos.filter(
+  (p) => p.data.layout !== "diptych-left" && p.data.layout !== "diptych-right"
+);
+const diptychLeft = photos.find((p) => p.data.layout === "diptych-left");
+const diptychRight = photos.find((p) => p.data.layout === "diptych-right");
+---
+
+<BaseLayout
+  title={`${series.data.title} · Lucas Poblete Dreyer`}
+  description={series.data.description_short}
+  image={series.data.cover_image}
+>
+  <Nav active="work" />
+
+  <div class="series-page">
+    <div class="series-intro">
+      <div class="breadcrumb"><a href="/">Work</a> &nbsp;/&nbsp; {series.data.title}</div>
+      <h1>{series.data.title}</h1>
+      <div class="meta-row">
+        <span>{series.data.location}</span>·<span>{series.data.period}</span>·<span>{photos.length} {photos.length === 1 ? "photograph" : "photographs"} shown</span>
+      </div>
+      <p>{series.data.description_intro}</p>
+      {series.data.description_paragraphs?.map((p: string) => <p>{p}</p>)}
+      <p class="byline">— Photographs by Lucas Poblete Dreyer</p>
+    </div>
+
+    {photos.length === 0 ? (
+      <div class="series-empty">
+        <p><em>This series is in development. Photographs coming soon.</em></p>
+      </div>
+    ) : (
+      <div class="sequence">
+        {sequencePhotos.map((photo) => (
+          <>
+            <div class={`plate ${photo.data.layout}`}>
+              <img src={photo.data.image} alt={photo.data.alt} />
+              <div class="caption">
+                <span class="num">{String(photo.data.order).padStart(2, "0")}</span>
+                {photo.data.caption}
+              </div>
+            </div>
+            {photo.data.interlude_after && (
+              <div class="text-interlude">{photo.data.interlude_after}</div>
+            )}
+          </>
+        ))}
+
+        {diptychLeft && diptychRight && (
+          <div class="plate diptych">
+            <div class="panel">
+              <img src={diptychLeft.data.image} alt={diptychLeft.data.alt} />
+              <div class="caption">
+                <span class="num">{String(diptychLeft.data.order).padStart(2, "0")}</span>
+                {diptychLeft.data.caption}
+              </div>
+            </div>
+            <div class="panel">
+              <img src={diptychRight.data.image} alt={diptychRight.data.alt} />
+              <div class="caption">
+                <span class="num">{String(diptychRight.data.order).padStart(2, "0")}</span>
+                {diptychRight.data.caption}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+
+  <Footer />
+</BaseLayout>
